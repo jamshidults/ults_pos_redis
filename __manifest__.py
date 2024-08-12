@@ -24,5 +24,5 @@ time it takes to load a POS session with a lot of products.
         ],
     },
     'license': 'LGPL-3',
-    "external_dependencies": {"python" : ["redis"]}
+
 }
