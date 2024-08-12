@@ -1,15 +1,32 @@
-Installing Redis
+# Installing Redis on Ubuntu
 
-1.Update your package list and install Redis:
+This guide will walk you through the steps to install and configure Redis on an Ubuntu system.
 
-sudo apt update
-sudo apt install redis-server
+## Prerequisites
 
-2.Start Redis:
+- An Ubuntu system (e.g., Ubuntu 20.04 or later)
+- A user account with `sudo` privileges
 
-sudo systemctl start redis-server
+## Installation Steps
 
-3.Enable Redis to start on boot:
+1. **Update your package list and install Redis**
 
-sudo systemctl enable redis-server
+   Begin by updating your package list to ensure you have the latest version information. Then, install the Redis server package:
+
+   ```bash
+   sudo apt update
+   sudo apt install redis-server
+
+2. **Start the Redis server**
+   ```bash
+   sudo systemctl start redis-server
+
+3. **Enable Redis to start on boot**
+
+     ```bash
+     sudo systemctl enable redis-server
+  
+   
+
+
 
