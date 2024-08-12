@@ -5,7 +5,7 @@
             <field name="name">PoS: Update Redis cache</field>
             <field name="model_id" ref="model_pos_redis"/>
             <field name="state">code</field>
-            <field name="code">model.load_all_products_to_redis()</field>
+            <field name="code">model.with_delay().load_all_products_to_redis()</field>
             <field name="active" eval="False"/>
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
