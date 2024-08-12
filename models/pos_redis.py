@@ -1,15 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
-import base64
-import json
-from ast import literal_eval
-
 from odoo import models, fields, api
-from odoo.tools import date_utils
-
 import json
-from datetime import datetime
-
 import redis
 from redis.exceptions import DataError
 
