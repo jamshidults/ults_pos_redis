@@ -31,7 +31,7 @@ class PosSession(models.Model):
         """
         if self.config_id.limited_products_loading:
             return super()._get_pos_ui_product_product(params)
-        records = self.get_products_from_cache()
+        records = self.get_products_from_cache(limit=1000)
         self._process_pos_ui_product_product(records)
         return records
 

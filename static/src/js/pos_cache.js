@@ -20,7 +20,7 @@ const PosCachePosGlobalState = (PosGlobalState) => class PosCachePosGlobalState 
             method: 'get_cached_products',
             args: [[odoo.pos_session_id], offset],
             context: this.env.session.user_context,
-        });
+        },{ shadow: true });
         this._loadProductProduct(products);
     }
 }

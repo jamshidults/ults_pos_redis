@@ -3,6 +3,16 @@ odoo.define('pos_cache.chrome', function (require) {
 
 const Chrome = require('point_of_sale.Chrome');
 const Registries = require('point_of_sale.Registries');
+const {
+        onError,
+        onMounted,
+        onWillDestroy,
+        useExternalListener,
+        useRef,
+        useState,
+        useSubEnv,
+        reactive,
+    } = owl;
 
 function roundUpDiv(y, x) {
     const remainder = y % x;
@@ -13,7 +23,10 @@ const PosCacheChrome = (Chrome) => class PosCacheChrome extends Chrome {
     _runBackgroundTasks() {
         super._runBackgroundTasks();
         if (!this.env.pos.config.limited_products_loading) {
-            this._loadRemainingProducts();
+         reactive(this)._loadRemainingProducts().then(() => {
+                    this.render(true);
+                });
+
         }
     }
     async _loadRemainingProducts() {
