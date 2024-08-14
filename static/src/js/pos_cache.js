@@ -14,11 +14,11 @@ const PosCachePosGlobalState = (PosGlobalState) => class PosCachePosGlobalState 
             context: this.env.session.user_context,
         });
     }
-    async _loadCachedProducts(start, end) {
+    async _loadCachedProducts(offset) {
         const products = await this.env.services.rpc({
             model: 'pos.session',
             method: 'get_cached_products',
-            args: [[odoo.pos_session_id], start, end],
+            args: [[odoo.pos_session_id], offset],
             context: this.env.session.user_context,
         });
         this._loadProductProduct(products);

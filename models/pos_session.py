@@ -3,15 +3,15 @@
 
 from odoo import models
 
-
+DOMAIN = [('sale_ok', '=', True), ('available_in_pos', '=', True)]
 
 
 class PosSession(models.Model):
     _inherit = 'pos.session'
 
-    def get_products_from_cache(self):
+    def get_products_from_cache(self,limit=1000,offset=0):
         cache = self.env['pos.redis']
-        products = cache.get_products_from_redis()
+        products = cache.get_limited_products_from_redis(limit=limit, offset=offset)
 
         if not products:
             # If products not found in Redis, fetch from DB and update Redis
@@ -33,13 +33,14 @@ class PosSession(models.Model):
             return super()._get_pos_ui_product_product(params)
         records = self.get_products_from_cache()
         self._process_pos_ui_product_product(records)
-        return records[:1000]
+        return records
 
-    def get_cached_products(self, start, end):
-        records = self.get_products_from_cache()
+    def get_cached_products(self, offset=0):
+        records = self.get_products_from_cache(limit=1000, offset=offset)
         self._process_pos_ui_product_product(records)
-        return records[start:end]
+        return records
 
     def get_total_products_count(self):
-        records = self.get_products_from_cache()
-        return len(records)
+        Product = self.env['product.product']
+        product_ids = Product.search(DOMAIN).ids
+        return len(product_ids)

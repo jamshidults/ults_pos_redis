@@ -22,11 +22,13 @@ const PosCacheChrome = (Chrome) => class PosCacheChrome extends Chrome {
         const nRemaining = totalProductsCount - nInitiallyLoaded;
         if (!(nRemaining > 0)) return;
         const multiple = 1000;
-        const nLoops = roundUpDiv(nRemaining, multiple);
-        for (let i = 0; i < nLoops; i++) {
-            console.log(`Loading products ${i * multiple + nInitiallyLoaded + 1} to ${(i + 1) * multiple + nInitiallyLoaded}`);
-            await this.env.pos._loadCachedProducts(i * multiple + nInitiallyLoaded, (i + 1) * multiple + nInitiallyLoaded);
-        }
+        let offset = nInitiallyLoaded;
+        while (offset < totalProductsCount) {
+            const end = Math.min(offset + multiple, totalProductsCount);
+            console.log(`Loading products ${offset + 1} to ${end}`);
+            await this.env.pos._loadCachedProducts(offset);
+            offset = end;
+            }
 
         this.showNotification(this.env._t('All products are loaded.'), 5000);
     }

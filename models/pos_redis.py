@@ -94,6 +94,35 @@ class PosRedis(models.Model):
             offset += 1000
             _logger.info('--------------------------------*****************************************************************************************************process products %s ', str(offset))
 
+    @api.model
+    def get_limited_products_from_redis(self,limit=1000,offset=0):
+        """Retrieve all products from Redis."""
+        redis_client = self._get_redis_client()
+
+        # Fetch product IDs from the database
+        Product = self.env['product.product']
+        product_ids = Product.search(DOMAIN,limit=limit,offset=offset).ids
+
+        # Construct Redis keys based on product IDs
+        keys = [f"products:{product_id}" for product_id in product_ids]
+
+        # Use pipeline for efficient retrieval
+        pipeline = redis_client.pipeline()
+        for key in keys:
+            pipeline.get(key)
+        serialized_products = pipeline.execute()
+
+        products = []
+        for serialized_product in serialized_products:
+            if serialized_product:
+                product = product_pb2.Product()
+                product.ParseFromString(serialized_product)
+                product_dict = self.protobuf_to_dict(product)
+                products.append(product_dict)
+                _logger.info(
+                    '--------------------------------*****************************************************************************************************process product dict %s ',
+                    product_dict)
+        return products
 
     @api.model
     def get_products_from_redis(self):
