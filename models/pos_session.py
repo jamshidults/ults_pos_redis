@@ -12,7 +12,7 @@ class PosSession(models.Model):
     def get_products_from_cache(self):
         cache = self.env['pos.redis']
         products = cache.get_products_from_redis()
-        print(products)
+
         if not products:
             # If products not found in Redis, fetch from DB and update Redis
             cache.load_all_products_to_redis()

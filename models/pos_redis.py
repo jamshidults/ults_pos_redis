@@ -3,7 +3,9 @@ from odoo import models, api
 from . import product_pb2  # Import generated Protobuf module
 import datetime
 import base64
+import logging
 
+_logger = logging.getLogger(__name__)
 
 DOMAIN = [('sale_ok', '=', True), ('available_in_pos', '=', True)]
 FIELD_LIST = ['display_name', 'lst_price', 'standard_price', 'categ_id', 'pos_categ_id', 'taxes_id', 'barcode', 'default_code', 'to_weight', 'uom_id', 'description_sale', 'description', 'product_tmpl_id', 'tracking', 'available_in_pos', 'attribute_line_ids', 'active', '__last_update', 'image_128', 'id']
@@ -90,6 +92,7 @@ class PosRedis(models.Model):
 
             pipeline.execute()  # Execute the pipeline to save the batch
             offset += 1000
+            _logger.info('--------------------------------*****************************************************************************************************process products %s ', str(offset))
 
 
     @api.model
@@ -117,6 +120,8 @@ class PosRedis(models.Model):
                 product.ParseFromString(serialized_product)
                 product_dict = self.protobuf_to_dict(product)
                 products.append(product_dict)
+                _logger.info(
+                    '--------------------------------*****************************************************************************************************process product dict %s ',product_dict)
         return products
 
 
