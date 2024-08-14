@@ -4,12 +4,20 @@
 from odoo import models
 
 
+
+
 class PosSession(models.Model):
     _inherit = 'pos.session'
 
     def get_products_from_cache(self):
         cache = self.env['pos.redis']
         products = cache.get_products_from_redis()
+        print(products)
+        if not products:
+            # If products not found in Redis, fetch from DB and update Redis
+            cache.load_all_products_to_redis()
+            products = self.get_products_from_cache()
+
         return products
 
 
@@ -25,7 +33,7 @@ class PosSession(models.Model):
             return super()._get_pos_ui_product_product(params)
         records = self.get_products_from_cache()
         self._process_pos_ui_product_product(records)
-        return records[:100000]
+        return records[:1000]
 
     def get_cached_products(self, start, end):
         records = self.get_products_from_cache()

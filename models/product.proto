@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package product;
+
+// Message to represent a Product
+message Product {
+    int32 id = 1;
+    string display_name = 2;
+    float lst_price = 3;
+    float standard_price = 4;
+
+    message Tuple {
+        int32 id = 1;
+        string name = 2;
+    }
+    Tuple categ_id = 5;
+    Tuple pos_categ_id = 6;
+
+    repeated int32 taxes_id = 7;
+    string barcode = 8;
+    string default_code = 9;
+    bool to_weight = 10;
+
+    // UOM represented as a tuple (ID, Name)
+    Tuple uom_id = 11;
+
+    string description_sale = 12;
+    string description = 13;
+
+    // Product Template ID represented as a tuple (ID, Name)
+    Tuple product_tmpl_id = 14;
+
+    string tracking = 15;
+    bool available_in_pos = 16;
+    repeated int32 attribute_line_ids = 17;
+    bool active = 18;
+    string __last_update = 19;
+    bytes image_128 = 20;
+}
+
+
